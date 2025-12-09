@@ -1,6 +1,7 @@
-﻿using ConsoleChessGame.Board;
+﻿using ConsoleChessGame;
+using ConsoleChessGame.Chessboard;
 
-Position p = new Position(3, 4);
+Board board = new Board(8, 8);
 
-Console.WriteLine($"Posicao: {p}");
+Screen.PrintBoard(board);
 Console.ReadLine();

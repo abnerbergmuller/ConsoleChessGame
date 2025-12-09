@@ -1,4 +1,4 @@
-﻿namespace ConsoleChessGame.Board;
+﻿namespace ConsoleChessGame.Chessboard;
 
 public class Position
 {
