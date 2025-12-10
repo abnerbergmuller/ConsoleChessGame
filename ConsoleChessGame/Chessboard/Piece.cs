@@ -7,15 +7,12 @@ public class Piece
     public int MovementsAmount { get; protected set; }
     public Board Board { get; protected set; }
 
-    public Piece(Position position, Color color, Board board)
+    public Piece(Color color, Board board)
     {
-        Position = position;
+        Position = null;
         Color = color;
         MovementsAmount = 0;
         Board = board;
     }
-
-    public Piece()
-    {
-    }
+    
 }

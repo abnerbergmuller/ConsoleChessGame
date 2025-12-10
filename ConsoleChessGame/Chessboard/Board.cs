@@ -21,4 +21,10 @@ public class Board
     {
         return _pieces[line, column];
     }
+
+    public void InsertPiece(Piece piece, Position position)
+    {
+        _pieces[position.Line, position.Column] = piece;
+        piece.Position = position;
+    }
 }
