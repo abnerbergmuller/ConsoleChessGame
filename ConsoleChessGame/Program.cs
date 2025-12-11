@@ -1,13 +1,21 @@
 ﻿using ConsoleChessGame;
 using ConsoleChessGame.Chessboard;
 using ConsoleChessGame.ChessLayer;
-Console.OutputEncoding = System.Text.Encoding.Unicode; 
+Console.OutputEncoding = System.Text.Encoding.Unicode;
 
-Board board = new Board(8, 8);
+try
+{
+    Board board = new Board(8, 8);
 
-board.InsertPiece(new Rook(Color.Preta, board), new Position(0, 0));
-board.InsertPiece(new Rook(Color.Preta, board), new Position(1, 3));
-board.InsertPiece(new King(Color.Preta, board), new Position(2, 4));
+    board.InsertPiece(new Rook(Color.Preta, board), new Position(0, 0));
+    board.InsertPiece(new Rook(Color.Preta, board), new Position(1, 5));
+    board.InsertPiece(new King(Color.Preta, board), new Position(3, 3));
 
-Screen.PrintBoard(board);
+    Screen.PrintBoard(board);
+}
+catch (ChessboardException e)
+{
+    Console.WriteLine(e.Message);
+}
+
 Console.ReadLine();
