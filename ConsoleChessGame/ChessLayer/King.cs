@@ -10,6 +10,6 @@ public class King : Piece
 
     public override string ToString()
     {
-        return "♔";
+        return ChessSet[0];
     }
 }
