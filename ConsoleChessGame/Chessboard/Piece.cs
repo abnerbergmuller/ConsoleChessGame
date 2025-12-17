@@ -1,6 +1,6 @@
 ﻿namespace ConsoleChessGame.Chessboard;
 
-public class Piece
+public abstract class Piece
 {
     public Position Position { get; set; }
     public Color Color { get; protected set; }
@@ -21,4 +21,6 @@ public class Piece
     {
         MovementsAmount++;
     }
+
+    public abstract bool[,] PossibleMoves();
 }

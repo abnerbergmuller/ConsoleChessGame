@@ -19,20 +19,38 @@ public class Screen
             Console.Write(8 - i + " ");
             for (int j = 0; j < board.Columns; j++)
             {
-                if (board.Piece(i, j) == null)
-                {
-                    Console.Write("- ");
-                }
-                else
-                {
-                    PrintPiece(board.Piece(i, j));
-                    Console.Write(" ");
-                }
+               PrintPiece(board.Piece(i, j));
             }
             Console.WriteLine();
         }
-
         Console.WriteLine("  A B C D E F G H");
+    }
+    
+    public static void PrintBoard(Board board, bool[,] possiblePositions)
+    {
+        ConsoleColor mainBackgroundColor = Console.BackgroundColor;
+        ConsoleColor altBackgroundColor = ConsoleColor.DarkGray;
+        
+        for (int i = 0;  i < board.Lines;  i++)
+        {
+            Console.Write(8 - i + " ");
+            for (int j = 0; j < board.Columns; j++)
+            {
+                if (possiblePositions[i, j] == true)
+                {
+                    Console.BackgroundColor = altBackgroundColor;
+                }
+                else
+                {
+                    Console.BackgroundColor = mainBackgroundColor;
+                }
+                PrintPiece(board.Piece(i, j));
+                Console.BackgroundColor = mainBackgroundColor;
+            }
+            Console.WriteLine();
+        }
+        Console.WriteLine("  A B C D E F G H");
+        Console.BackgroundColor = mainBackgroundColor;
     }
 
     public static ChessPosition ReadPosition()
@@ -45,7 +63,15 @@ public class Screen
     
     public static void PrintPiece(Piece piece)
     {
-        piece.ChessSet = Colors[piece.Color];
-        Console.Write(piece);
+        if (piece == null)
+        {
+            Console.Write("- ");
+        }
+        else
+        { 
+            piece.ChessSet = Colors[piece.Color];
+            Console.Write(piece);
+            Console.Write(" ");
+        }
     }
 }

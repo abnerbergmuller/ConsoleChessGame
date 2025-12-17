@@ -15,6 +15,12 @@ public class Position
     {
     }
 
+    public void SetValues(int line, int column)
+    {
+        this.Line = line;
+        this.Column = column;
+    }
+    
     public override string ToString()
     {
         return Line
