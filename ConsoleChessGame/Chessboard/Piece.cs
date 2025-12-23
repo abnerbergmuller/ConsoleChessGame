@@ -22,6 +22,11 @@ public abstract class Piece
         MovementsAmount++;
     }
 
+    public void DecreaseMovesAmount()
+    {
+        MovementsAmount--;
+    }
+
     public bool ExistPossibleMoves()
     {
         bool[,] matrix = PossibleMoves();

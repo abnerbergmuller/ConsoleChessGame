@@ -20,6 +20,10 @@ public class Screen
         Console.WriteLine();
         Console.WriteLine("Turno: " + chessMatch._turn);
         Console.WriteLine("Aguardando jogada: " + chessMatch.TranslateTeam(chessMatch._currentPlayer));
+        if (chessMatch.Check)       
+        {
+            Console.WriteLine("XEQUE!!");
+        }
     }
 
     public static void PrintCapturedPieces(Match chessMatch)
