@@ -13,10 +13,7 @@ try
         try
         {
             Console.Clear();
-            Screen.PrintBoard(chessMatch.Board);
-            Console.WriteLine();
-            Console.WriteLine("Turno: " + chessMatch._turn);
-            Console.WriteLine("Aguardando jogada: " + chessMatch.TranslateTeam(chessMatch._currentPlayer));
+            Screen.PrintMatch(chessMatch);
 
             Console.WriteLine();
             Console.Write("Origem: ");
