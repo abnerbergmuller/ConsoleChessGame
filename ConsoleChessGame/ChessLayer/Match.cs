@@ -11,6 +11,7 @@ public class Match
     private HashSet<Piece> _pieces;
     private HashSet<Piece> _capturedPieces;
     public bool Check { get; private set; }
+    public Piece EnPassant { get; private set; }
 
     public Match()
     {
@@ -19,6 +20,7 @@ public class Match
         _currentPlayer = Color.White;
         IsEnded = false;
         Check = false;
+        EnPassant = null;
         _pieces = new HashSet<Piece>();
         _capturedPieces = new HashSet<Piece>();
         InsertPieces();
@@ -34,7 +36,7 @@ public class Match
         {
             _capturedPieces.Add(capturedPiece);
         }
-        
+
         //ROQUE PEQUENO
         if (piece is King && destination.Column == origin.Column + 2)
         {
@@ -44,7 +46,7 @@ public class Match
             rook.AddMovesAmount();
             Board.InsertPiece(rook, rookDestination);
         }
-        
+
         //ROQUE GRANDE
         if (piece is King && destination.Column == origin.Column - 2)
         {
@@ -53,6 +55,26 @@ public class Match
             Piece rook = Board.RemovePiece(rookOrigin);
             rook.AddMovesAmount();
             Board.InsertPiece(rook, rookDestination);
+        }
+
+        //EN PASSANT
+        if (piece is Pawn)
+        {
+            if (origin.Column != destination.Column && capturedPiece == null)
+            {
+                Position pawnPosition;
+                if (piece.Color == Color.White)
+                {
+                    pawnPosition = new Position(destination.Line + 1, destination.Column);
+                }
+                else
+                {
+                    pawnPosition = new Position(destination.Line - 1, destination.Column);
+                }
+
+                capturedPiece = Board.RemovePiece(pawnPosition);
+                _capturedPieces.Add(capturedPiece);
+            }
         }
 
         return capturedPiece;
@@ -69,7 +91,7 @@ public class Match
         }
 
         Board.InsertPiece(piece, origin);
-        
+
         //ROQUE PEQUENO
         if (piece is King && destination.Column == origin.Column + 2)
         {
@@ -79,7 +101,7 @@ public class Match
             rook.DecreaseMovesAmount();
             Board.InsertPiece(rook, rookOrigin);
         }
-        
+
         //ROQUE GRANDE
         if (piece is King && destination.Column == origin.Column - 2)
         {
@@ -88,6 +110,25 @@ public class Match
             Piece rook = Board.RemovePiece(rookDestination);
             rook.DecreaseMovesAmount();
             Board.InsertPiece(rook, rookOrigin);
+        }
+
+        //EN PASSANT
+        if (piece is Pawn)
+        {
+            if (origin.Column != destination.Column && capturedPiece == EnPassant)
+            {
+                Piece pawn = Board.RemovePiece(destination);
+                Position pawnPosition;
+                if (piece.Color == Color.White)
+                {
+                    pawnPosition = new Position(3, destination.Column);
+                }
+                else
+                {
+                    pawnPosition = new Position(4, destination.Column);
+                }
+                Board.InsertPiece(pawn, pawnPosition);
+            }
         }
     }
 
@@ -119,12 +160,24 @@ public class Match
             _turn++;
             ChangePlayer();
         }
+
+        Piece piece = Board.Piece(destination);
+
+        //EN PASSANT
+        if (piece is Pawn && (destination.Line == origin.Line - 2 || destination.Line == origin.Line + 2))
+        {
+            EnPassant = piece;
+        }
+        else
+        {
+            EnPassant = null;
+        }
     }
 
     public void ValidateOrigin(Position position)
     {
         Board.ValidatePosition(position);
-        
+
         if (Board.Piece(position) == null)
         {
             throw new ChessboardException("Não existe peça na posição de origem escolhida!");
@@ -144,7 +197,7 @@ public class Match
     public void ValidateDestination(Position origin, Position destination)
     {
         Board.ValidatePosition(destination);
-        
+
         if (!Board.Piece(origin).CanMoveTo(destination))
         {
             throw new ChessboardException("Posição de destino inválida!");
@@ -296,15 +349,15 @@ public class Match
         InsertNewPiece('f', 1, new Bishop(Color.White, Board));
         InsertNewPiece('g', 1, new Knight(Color.White, Board));
         InsertNewPiece('h', 1, new Rook(Color.White, Board));
-        InsertNewPiece('a', 2, new Pawn(Color.White, Board));
-        InsertNewPiece('b', 2, new Pawn(Color.White, Board));
-        InsertNewPiece('c', 2, new Pawn(Color.White, Board));
-        InsertNewPiece('d', 2, new Pawn(Color.White, Board));
-        InsertNewPiece('e', 2, new Pawn(Color.White, Board));
-        InsertNewPiece('f', 2, new Pawn(Color.White, Board));
-        InsertNewPiece('g', 2, new Pawn(Color.White, Board));
-        InsertNewPiece('h', 2, new Pawn(Color.White, Board));
-        
+        InsertNewPiece('a', 2, new Pawn(Color.White, Board, this));
+        InsertNewPiece('b', 2, new Pawn(Color.White, Board, this));
+        InsertNewPiece('c', 2, new Pawn(Color.White, Board, this));
+        InsertNewPiece('d', 2, new Pawn(Color.White, Board, this));
+        InsertNewPiece('e', 2, new Pawn(Color.White, Board, this));
+        InsertNewPiece('f', 2, new Pawn(Color.White, Board, this));
+        InsertNewPiece('g', 2, new Pawn(Color.White, Board, this));
+        InsertNewPiece('h', 2, new Pawn(Color.White, Board, this));
+
         InsertNewPiece('a', 8, new Rook(Color.Black, Board));
         InsertNewPiece('b', 8, new Knight(Color.Black, Board));
         InsertNewPiece('c', 8, new Bishop(Color.Black, Board));
@@ -313,13 +366,13 @@ public class Match
         InsertNewPiece('f', 8, new Bishop(Color.Black, Board));
         InsertNewPiece('g', 8, new Knight(Color.Black, Board));
         InsertNewPiece('h', 8, new Rook(Color.Black, Board));
-        InsertNewPiece('a', 7, new Pawn(Color.Black, Board));
-        InsertNewPiece('b', 7, new Pawn(Color.Black, Board));
-        InsertNewPiece('c', 7, new Pawn(Color.Black, Board));
-        InsertNewPiece('d', 7, new Pawn(Color.Black, Board));
-        InsertNewPiece('e', 7, new Pawn(Color.Black, Board));
-        InsertNewPiece('f', 7, new Pawn(Color.Black, Board));
-        InsertNewPiece('g', 7, new Pawn(Color.Black, Board));
-        InsertNewPiece('h', 7, new Pawn(Color.Black, Board));
+        InsertNewPiece('a', 7, new Pawn(Color.Black, Board, this));
+        InsertNewPiece('b', 7, new Pawn(Color.Black, Board, this));
+        InsertNewPiece('c', 7, new Pawn(Color.Black, Board, this));
+        InsertNewPiece('d', 7, new Pawn(Color.Black, Board, this));
+        InsertNewPiece('e', 7, new Pawn(Color.Black, Board, this));
+        InsertNewPiece('f', 7, new Pawn(Color.Black, Board, this));
+        InsertNewPiece('g', 7, new Pawn(Color.Black, Board, this));
+        InsertNewPiece('h', 7, new Pawn(Color.Black, Board, this));
     }
 }
