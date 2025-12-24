@@ -7,7 +7,7 @@ public class Screen
 {
     private static readonly Dictionary<Color, List<string>> Colors = new Dictionary<Color, List<string>>
     {
-        //PEÇAS DEVEM SER CHAMADAS PELO INDEX:  0  ,  1  ,  2 ,  3  ,  4 ,  5
+    //PEÇAS DEVEM SER CHAMADAS PELO INDEX:  0  ,  1  ,  2 ,  3  ,  4 ,  5
         { Color.White, new List<string> { "♔", "♕", "♖", "♗", "♘", "♙" } },
         { Color.Black, new List<string> { "♚", "♛", "♜", "♝", "♞", "♟" } }
     };
@@ -105,8 +105,19 @@ public class Screen
     public static ChessPosition ReadPosition()
     {
         string screenInput = Console.ReadLine();
+        
+        if (string.IsNullOrWhiteSpace(screenInput) || screenInput.Length < 2)
+        {
+            throw new ChessboardException("Entrada inválida! Digite uma coluna e uma linha (ex: a1).");
+        }
+        
         char column = screenInput[0];
-        int line = int.Parse(screenInput[1] + "");
+        int line;
+        if (!int.TryParse(screenInput.Substring(1), out line))
+        {
+            throw new ChessboardException("Formato de linha inválido! Digite um número após a letra.");
+        }
+        
         return new ChessPosition(column, line);
     }
 
