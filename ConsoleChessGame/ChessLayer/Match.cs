@@ -141,6 +141,22 @@ public class Match
             UndoMove(origin, destination, capturedPiece);
             throw new ChessboardException("Você não pode se colocar em xeque!");
         }
+        
+        Piece piece = Board.Piece(destination);
+        
+        //PROMOÇÃO
+
+        if (piece is Pawn)
+        {
+            if ((piece.Color == Color.White && destination.Line == 0) || (piece.Color == Color.Black  && destination.Line == 7))
+            {
+                piece = Board.RemovePiece(destination);
+                _pieces.Remove(piece);
+                Piece queen = new Queen(piece.Color, Board);
+                Board.InsertPiece(queen, destination);
+                _pieces.Add(queen);
+            }
+        }
 
         if (IsInCheck(Opponent(_currentPlayer)))
         {
@@ -160,8 +176,6 @@ public class Match
             _turn++;
             ChangePlayer();
         }
-
-        Piece piece = Board.Piece(destination);
 
         //EN PASSANT
         if (piece is Pawn && (destination.Line == origin.Line - 2 || destination.Line == origin.Line + 2))
