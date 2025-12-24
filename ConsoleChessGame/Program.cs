@@ -38,6 +38,9 @@ try
             Console.ReadLine();
         } 
     }
+    
+    Console.Clear();
+    Screen.PrintMatch(chessMatch);
 }
 catch (ChessboardException e)
 {

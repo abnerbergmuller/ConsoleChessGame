@@ -14,7 +14,7 @@ public class Match
 
     public Match()
     {
-        Board = new Board(8,8);
+        Board = new Board(8, 8);
         _turn = 1;
         _currentPlayer = Color.White;
         IsEnded = false;
@@ -34,6 +34,7 @@ public class Match
         {
             _capturedPieces.Add(capturedPiece);
         }
+
         return capturedPiece;
     }
 
@@ -46,9 +47,10 @@ public class Match
             Board.InsertPiece(capturedPiece, destination);
             _capturedPieces.Remove(capturedPiece);
         }
+
         Board.InsertPiece(piece, origin);
     }
-    
+
     public void MakePlay(Position origin, Position destination)
     {
         Piece capturedPiece = ExecuteMove(origin, destination);
@@ -67,11 +69,18 @@ public class Match
         {
             Check = false;
         }
-        
-        _turn++;
-        ChangePlayer();
+
+        if (TestCheckmate(Opponent(_currentPlayer)))
+        {
+            IsEnded = true;
+        }
+        else
+        {
+            _turn++;
+            ChangePlayer();
+        }
     }
-    
+
     public void ValidateOrigin(Position position)
     {
         if (Board.Piece(position) == null)
@@ -107,7 +116,7 @@ public class Match
             return "Escolha uma cor disponível!";
         }
     }
-    
+
     private void ChangePlayer()
     {
         if (_currentPlayer == Color.White)
@@ -144,13 +153,14 @@ public class Match
                 aux.Add(x);
             }
         }
+
         aux.ExceptWith(CapturedPieces(color));
         return aux;
     }
 
     private Color Opponent(Color color)
     {
-        if  (color == Color.White)
+        if (color == Color.White)
         {
             return Color.Black;
         }
@@ -167,8 +177,9 @@ public class Match
             if (x is King)
             {
                 return x;
-            } 
+            }
         }
+
         return null;
     }
 
@@ -179,7 +190,7 @@ public class Match
         {
             throw new ChessboardException("Não há nenhum rei da cor " + color + " no tabuleiro!");
         }
-        
+
         foreach (Piece x in PiecesInGame(Opponent(color)))
         {
             bool[,] mat = x.PossibleMoves();
@@ -191,27 +202,67 @@ public class Match
 
         return false;
     }
-    
+
+    public bool TestCheckmate(Color color)
+    {
+        if (!IsInCheck(color))
+        {
+            return false;
+        }
+
+        foreach (Piece x in PiecesInGame(color))
+        {
+            bool[,] mat = x.PossibleMoves();
+            for (int i = 0; i < Board.Lines; i++)
+            {
+                for (int j = 0; j < Board.Columns; j++)
+                {
+                    if (mat[i, j])
+                    {
+                        Position origin = x.Position;
+                        Position destination = new Position(i, j);
+                        Piece capturedPiece = ExecuteMove(origin, destination);
+                        bool testCheck = IsInCheck(color);
+                        UndoMove(origin, destination, capturedPiece);
+                        if (!testCheck)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
     public void InsertNewPiece(char column, int line, Piece piece)
     {
         Board.InsertPiece(piece, new ChessPosition(column, line).ToPosition());
         _pieces.Add(piece);
     }
-    
+
     private void InsertPieces()
     {
-        InsertNewPiece('c', 1, new Rook(Color.White, Board));
-        InsertNewPiece('c', 2, new Rook(Color.White, Board));
-        InsertNewPiece('d', 2, new Rook(Color.White, Board));
-        InsertNewPiece('e', 2, new Rook(Color.White, Board));
-        InsertNewPiece('e', 1, new Rook(Color.White, Board));
-        InsertNewPiece('d', 1, new King(Color.White, Board));
+        // InsertNewPiece('c', 1, new Rook(Color.White, Board));
+        // InsertNewPiece('c', 2, new Rook(Color.White, Board));
+        // InsertNewPiece('d', 2, new Rook(Color.White, Board));
+        // InsertNewPiece('e', 2, new Rook(Color.White, Board));
+        // InsertNewPiece('e', 1, new Rook(Color.White, Board));
+        // InsertNewPiece('d', 1, new King(Color.White, Board));
+        //
+        // InsertNewPiece('c', 7, new Rook(Color.Black, Board));
+        // InsertNewPiece('c', 8, new Rook(Color.Black, Board));
+        // InsertNewPiece('d', 7, new Rook(Color.Black, Board));
+        // InsertNewPiece('e', 7, new Rook(Color.Black, Board));
+        // InsertNewPiece('e', 8, new Rook(Color.Black, Board));
+        // InsertNewPiece('d', 8, new King(Color.Black, Board));
         
-        InsertNewPiece('c', 7, new Rook(Color.Black, Board));
-        InsertNewPiece('c', 8, new Rook(Color.Black, Board));
-        InsertNewPiece('d', 7, new Rook(Color.Black, Board));        
-        InsertNewPiece('e', 7, new Rook(Color.Black, Board));
-        InsertNewPiece('e', 8, new Rook(Color.Black, Board));
-        InsertNewPiece('d', 8, new King(Color.Black, Board));
+        InsertNewPiece('c', 1, new Rook(Color.White, Board));
+        InsertNewPiece('d', 1, new King(Color.White, Board));
+        InsertNewPiece('h', 7, new Rook(Color.White, Board));
+        
+        InsertNewPiece('a', 8, new King(Color.Black, Board));
+        InsertNewPiece('b', 8, new Rook(Color.Black, Board));
     }
 }

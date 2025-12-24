@@ -19,10 +19,18 @@ public class Screen
         PrintCapturedPieces(chessMatch);
         Console.WriteLine();
         Console.WriteLine("Turno: " + chessMatch._turn);
-        Console.WriteLine("Aguardando jogada: " + chessMatch.TranslateTeam(chessMatch._currentPlayer));
-        if (chessMatch.Check)       
+        if (!chessMatch.IsEnded)
         {
-            Console.WriteLine("XEQUE!!");
+            Console.WriteLine("Aguardando jogada: " + chessMatch.TranslateTeam(chessMatch._currentPlayer));
+            if (chessMatch.Check)
+            {
+                Console.WriteLine("XEQUE!!");
+            }
+        }
+        else
+        {
+            Console.WriteLine("XEQUEMATE!!!");
+            Console.WriteLine("Vencedor: " + chessMatch.TranslateTeam(chessMatch._currentPlayer));
         }
     }
 
