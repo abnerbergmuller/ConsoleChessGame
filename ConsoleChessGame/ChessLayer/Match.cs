@@ -34,6 +34,26 @@ public class Match
         {
             _capturedPieces.Add(capturedPiece);
         }
+        
+        //ROQUE PEQUENO
+        if (piece is King && destination.Column == origin.Column + 2)
+        {
+            Position rookOrigin = new Position(origin.Line, origin.Column + 3);
+            Position rookDestination = new Position(origin.Line, origin.Column + 1);
+            Piece rook = Board.RemovePiece(rookOrigin);
+            rook.AddMovesAmount();
+            Board.InsertPiece(rook, rookDestination);
+        }
+        
+        //ROQUE GRANDE
+        if (piece is King && destination.Column == origin.Column - 2)
+        {
+            Position rookOrigin = new Position(origin.Line, origin.Column - 4);
+            Position rookDestination = new Position(origin.Line, origin.Column - 1);
+            Piece rook = Board.RemovePiece(rookOrigin);
+            rook.AddMovesAmount();
+            Board.InsertPiece(rook, rookDestination);
+        }
 
         return capturedPiece;
     }
@@ -49,6 +69,26 @@ public class Match
         }
 
         Board.InsertPiece(piece, origin);
+        
+        //ROQUE PEQUENO
+        if (piece is King && destination.Column == origin.Column + 2)
+        {
+            Position rookOrigin = new Position(origin.Line, origin.Column + 3);
+            Position rookDestination = new Position(origin.Line, origin.Column + 1);
+            Piece rook = Board.RemovePiece(rookDestination);
+            rook.DecreaseMovesAmount();
+            Board.InsertPiece(rook, rookOrigin);
+        }
+        
+        //ROQUE GRANDE
+        if (piece is King && destination.Column == origin.Column - 2)
+        {
+            Position rookOrigin = new Position(origin.Line, origin.Column - 4);
+            Position rookDestination = new Position(origin.Line, origin.Column - 1);
+            Piece rook = Board.RemovePiece(rookDestination);
+            rook.DecreaseMovesAmount();
+            Board.InsertPiece(rook, rookOrigin);
+        }
     }
 
     public void MakePlay(Position origin, Position destination)
@@ -252,7 +292,7 @@ public class Match
         InsertNewPiece('b', 1, new Knight(Color.White, Board));
         InsertNewPiece('c', 1, new Bishop(Color.White, Board));
         InsertNewPiece('d', 1, new Queen(Color.White, Board));
-        InsertNewPiece('e', 1, new King(Color.White, Board));
+        InsertNewPiece('e', 1, new King(Color.White, Board, this));
         InsertNewPiece('f', 1, new Bishop(Color.White, Board));
         InsertNewPiece('g', 1, new Knight(Color.White, Board));
         InsertNewPiece('h', 1, new Rook(Color.White, Board));
@@ -269,7 +309,7 @@ public class Match
         InsertNewPiece('b', 8, new Knight(Color.Black, Board));
         InsertNewPiece('c', 8, new Bishop(Color.Black, Board));
         InsertNewPiece('d', 8, new Queen(Color.Black, Board));
-        InsertNewPiece('e', 8, new King(Color.Black, Board));
+        InsertNewPiece('e', 8, new King(Color.Black, Board, this));
         InsertNewPiece('f', 8, new Bishop(Color.Black, Board));
         InsertNewPiece('g', 8, new Knight(Color.Black, Board));
         InsertNewPiece('h', 8, new Rook(Color.Black, Board));

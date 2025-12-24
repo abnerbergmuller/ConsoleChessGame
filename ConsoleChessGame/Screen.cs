@@ -8,8 +8,8 @@ public class Screen
     private static readonly Dictionary<Color, List<string>> Colors = new Dictionary<Color, List<string>>
     {
     //PEÇAS DEVEM SER CHAMADAS PELO INDEX:  0  ,  1  ,  2 ,  3  ,  4 ,  5
-        { Color.White, new List<string> { "♔", "♕", "♖", "♗", "♘", "♙" } },
-        { Color.Black, new List<string> { "♚", "♛", "♜", "♝", "♞", "♟" } }
+        { Color.White, new List<string> { "♚", "♛", "♜", "♝", "♞", "♟" } },
+        { Color.Black, new List<string> { "♔", "♕", "♖", "♗", "♘", "♙" } }
     };
 
     public static void PrintMatch(Match chessMatch)
@@ -130,8 +130,7 @@ public class Screen
         else
         {
             piece.ChessSet = Colors[piece.Color];
-            Console.Write(piece);
-            Console.Write(" ");
+            Console.Write(piece + " ");
         }
     }
 }

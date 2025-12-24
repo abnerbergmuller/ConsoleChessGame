@@ -1,4 +1,5 @@
-﻿using ConsoleChessGame;
+﻿
+using ConsoleChessGame;
 using ConsoleChessGame.Chessboard;
 using ConsoleChessGame.ChessLayer;
 
