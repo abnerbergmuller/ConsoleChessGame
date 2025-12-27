@@ -74,3 +74,5 @@ Destino: e4
 
 ---
 Desenvolvido com o objetivo de estudo e prática de Engenharia de Software.
+
+Por Abner Bergmüller.
